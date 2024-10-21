@@ -1,9 +1,15 @@
-import { Hono } from 'hono'
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { calabazaRouters } from './routers/calabazaRouters';
 
-const app = new Hono<{ Bindings: CloudflareBindings }>()
+export type Env = {
+  DB: D1Database
+}
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+const app = new Hono<{ Bindings: Env }>()
 
-export default app
+app.use('/api/*', cors());
+
+app.route('/api/calabaza', calabazaRouters );
+
+export default app  
